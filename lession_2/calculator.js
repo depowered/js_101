@@ -11,33 +11,33 @@ function invalidNumber(number) {
 }
 
 while (true) {
-  prompt(MESSAGES['welcome']);
+  prompt(MESSAGES['en-US']['welcome']);
 
   // Ask the user for the first number.
-  prompt(MESSAGES['firstNumber']);
+  prompt(MESSAGES['en-US']['firstNumber']);
   let number1 = readline.question();
 
   while (invalidNumber(number1)) {
-    prompt(MESSAGES['invalidNumber']);
+    prompt(MESSAGES['en-US']['invalidNumber']);
     number1 = readline.question();
   }
 
   // Ask the user for the second number.
-  prompt(MESSAGES['secondNumber']);
+  prompt(MESSAGES['en-US']['secondNumber']);
   let number2 = readline.question();
 
   while (invalidNumber(number2)) {
-    prompt(MESSAGES['invalidNumber']);
+    prompt(MESSAGES['en-US']['invalidNumber']);
     number2 = readline.question();
   }
 
   // Ask the user for an operation to perform.
-  prompt(MESSAGES['operationsLine1']);
-  prompt(MESSAGES['operationsLine2']);
+  prompt(MESSAGES['en-US']['operationsLine1']);
+  prompt(MESSAGES['en-US']['operationsLine2']);
   let operation = readline.question();
 
   while (!['1', '2', '3', '4'].includes(operation)) {
-    prompt(MESSAGES['invalidOperation']);
+    prompt(MESSAGES['en-US']['invalidOperation']);
     operation = readline.question();
   }
 
@@ -63,7 +63,7 @@ while (true) {
   prompt(`The result is: ${output}`);
 
   // Ask the user if they would like restart the calculator
-  prompt(MESSAGES['repeat']);
+  prompt(MESSAGES['en-US']['repeat']);
   let repeat = readline.question();
   if (repeat === "" || repeat.toLowerCase()[0] !== 'y') {
     break;
