@@ -1,6 +1,10 @@
-const MESSAGES = require("./calculator_messages.json");
-
 const readline = require('readline-sync');
+const MESSAGES = require("./calculator_messages.json");
+const LANGUAGE = 'en';
+
+function message(messageKey, language = LANGUAGE) {
+  return MESSAGES[language][messageKey];
+}
 
 function prompt(message) {
   console.log(`=> ${message}`);
@@ -11,33 +15,33 @@ function invalidNumber(number) {
 }
 
 while (true) {
-  prompt(MESSAGES['en-US']['welcome']);
+  prompt(message('welcome'));
 
   // Ask the user for the first number.
-  prompt(MESSAGES['en-US']['firstNumber']);
+  prompt(message('firstNumber'));
   let number1 = readline.question();
 
   while (invalidNumber(number1)) {
-    prompt(MESSAGES['en-US']['invalidNumber']);
+    prompt(message('invalidNumber'));
     number1 = readline.question();
   }
 
   // Ask the user for the second number.
-  prompt(MESSAGES['en-US']['secondNumber']);
+  prompt(message('secondNumber'));
   let number2 = readline.question();
 
   while (invalidNumber(number2)) {
-    prompt(MESSAGES['en-US']['invalidNumber']);
+    prompt(message('invalidNumber'));
     number2 = readline.question();
   }
 
   // Ask the user for an operation to perform.
-  prompt(MESSAGES['en-US']['operationsLine1']);
-  prompt(MESSAGES['en-US']['operationsLine2']);
+  prompt(message('operationsLine1'));
+  prompt(message('operationsLine2'));
   let operation = readline.question();
 
   while (!['1', '2', '3', '4'].includes(operation)) {
-    prompt(MESSAGES['en-US']['invalidOperation']);
+    prompt(message('invalidOperation'));
     operation = readline.question();
   }
 
@@ -63,7 +67,7 @@ while (true) {
   prompt(`The result is: ${output}`);
 
   // Ask the user if they would like restart the calculator
-  prompt(MESSAGES['en-US']['repeat']);
+  prompt(message('repeat'));
   let repeat = readline.question();
   if (repeat === "" || repeat.toLowerCase()[0] !== 'y') {
     break;
