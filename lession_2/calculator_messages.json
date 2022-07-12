@@ -1,0 +1,10 @@
+{
+    "welcome": "Welcome to Calculator!",
+    "firstNumber": "What is the first number?",
+    "secondNumber": "What is the second number?",
+    "invalidNumber": "Input provided is not a valid number. Please try again.",
+    "operationsLine1": "What operation would you like to preform?",
+    "operationsLine2": "1) Add 2) Subtract 3) Multiply 4) Divide",
+    "invalidOperation": "Input provided is not 1, 2, 3, or 4. Please try again.",
+    "repeat": "Would you like to preform another calculation? (y/n)"
+}
