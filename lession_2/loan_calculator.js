@@ -1,23 +1,14 @@
 const readline = require('readline-sync');
 const MESSAGES = require('./loan_messages.json');
 
-function prompt(message) {
-  console.log(`=> ${message}`);
-}
-
 function isValidNumericInput(inputString) {
   let num = Number(inputString);
 
-  // Verify the input can be coerced to a number
-  if (Number.isNaN(num)) {
+  if (Number.isNaN(num)) { // Verify the input can be coerced to a number
+    return false;
+  } else if (num <= 0) { // Verify the input is positive and not zero
     return false;
   }
-
-  // Verify the input is positive and not zero
-  if (num <= 0) {
-    return false;
-  }
-
   return true;
 }
 
@@ -28,7 +19,9 @@ function isValidTimeUnitInput(firstChar) {
   return false;
 }
 
-function calcMonthlyPaymentInCents(loanAmountInCents, monthlyInterestRate, loanDurationInMonths) {
+function calcMonthlyPaymentInCents(
+  loanAmountInCents, monthlyInterestRate, loanDurationInMonths
+) {
   let monthlyPaymentInCents = (
     loanAmountInCents * (
       monthlyInterestRate / (
@@ -40,39 +33,39 @@ function calcMonthlyPaymentInCents(loanAmountInCents, monthlyInterestRate, loanD
   return monthlyPaymentInCents;
 }
 
-// Welcome user
+// START
 console.log(MESSAGES['welcome']);
 
 // GET loan amount in dollars and cents ($123.45) from user
 let loanAmountInput = readline.question(MESSAGES['loanAmmount']);
 while (!isValidNumericInput(loanAmountInput)) {
-  prompt(MESSAGES['invalidInput']);
+  console.log(MESSAGES['invalidInput']);
   loanAmountInput = readline.question(MESSAGES['loanAmmount']);
 }
 
-// SET loanAmountInCents = input converted to integer of cents
+// CONVERT input to integer of cents
 let loanAmountInCents = Math.floor(Number(loanAmountInput) * 100);
 
 // GET Annual Percentage Rate (APR) in percent (3.50%) from user
 let annualPercentageRateInput = readline.question(MESSAGES['annualPercentageRate']);
 while (!isValidNumericInput(annualPercentageRateInput)) {
-  prompt(MESSAGES['invalidInput']);
+  console.log(MESSAGES['invalidInput']);
   annualPercentageRateInput = readline.question(MESSAGES['annualPercentageRate']);
 }
 
-// SET annualPercentageRate = input converted to a decimal ratio (3.25% --> 0.0325)
+// CONVERT input to ratio between 0 and 1
 let annualPercentageRate = parseFloat(annualPercentageRateInput) / 100;
 
-// SET monthlyInterestRate = annualPercentageRate / 12
+// CONVERT yearly rate to monthly rate
 let monthlyInterestRate = annualPercentageRate / 12;
 
 // GET time unit the user wishes to provide the loan duration (years or months)
 let timeUnitInput = readline.question(MESSAGES['timeUnit']);
 
-// SET loanDurationUnit = first letter of input converted to lowercase
+// CONVERT input to one letter string
 let firstChar = timeUnitInput.trim().toLowerCase()[0];
 while (!isValidTimeUnitInput(firstChar)) {
-  prompt(MESSAGES['invalidInput']);
+  console.log(MESSAGES['invalidInput']);
   timeUnitInput = readline.question(MESSAGES['timeUnit']);
   firstChar = timeUnitInput.trim().toLowerCase()[0];
 }
@@ -80,14 +73,11 @@ while (!isValidTimeUnitInput(firstChar)) {
 // GET loan duration from user
 let loanDurationInput = readline.question(MESSAGES['loanDuration']);
 while (!isValidNumericInput(loanDurationInput)) {
-  prompt(MESSAGES['invalidInput']);
+  console.log(MESSAGES['invalidInput']);
   loanDurationInput = readline.question(MESSAGES['loanDuration']);
 }
 
-// IF loanDurationUnit === 'y'
-//     SET loanDuration = input * 12
-// ELSE
-//     SET loanDuration = input
+// CONVERT duration to months if necessary
 let loanDurationInMonths;
 switch (firstChar) {
   case 'y':
@@ -98,8 +88,10 @@ switch (firstChar) {
     break;
 }
 
-// SET monthlyPaymentInCents = calcMonthlyPayment()
-let monthlyPaymentInCents = calcMonthlyPaymentInCents(loanAmountInCents, monthlyInterestRate, loanDurationInMonths);
+// CALCULATE monthly payment
+let monthlyPaymentInCents = calcMonthlyPaymentInCents(
+  loanAmountInCents, monthlyInterestRate, loanDurationInMonths
+);
 
 // PRINT monthlyPaymentInCents to terminal formatted as currency ($123.45)
 console.log(`Your monthly loan payment will be $${(monthlyPaymentInCents / 100).toFixed(2)}`);
