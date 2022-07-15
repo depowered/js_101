@@ -3,20 +3,39 @@ const MESSAGES = require('./loan_messages.json');
 
 function isValidNumericInput(inputString) {
   let num = Number(inputString);
-
-  if (Number.isNaN(num)) { // Verify the input can be coerced to a number
-    return false;
-  } else if (num <= 0) { // Verify the input is positive and not zero
+  if (Number.isNaN(num) || num <= 0) {
     return false;
   }
   return true;
 }
 
-function isValidTimeUnitInput(firstChar) {
+function getFirstLowerChar(inputString) {
+  return inputString.trim().toLowerCase()[0];
+}
+
+function isValidTimeUnitInput(inputString) {
+  let firstChar = getFirstLowerChar(inputString);
   if (firstChar === 'y' || firstChar === 'm') {
     return true;
   }
   return false;
+}
+
+function getAndValidateInputString(question, validationFunction) {
+  let input = readline.question(question);
+  while (!validationFunction(input)) {
+    console.log(MESSAGES['invalidInput']);
+    input = readline.question(question);
+  }
+  return input;
+}
+
+function getLoanDurationInMonths(timeUnitInput, loanDurationInput) {
+  let firstChar = getFirstLowerChar(timeUnitInput);
+  if (firstChar === 'y') {
+    return Number(loanDurationInput * 12);
+  }
+  return Number(loanDurationInput);
 }
 
 function calcMonthlyPaymentInCents(
@@ -37,56 +56,27 @@ function calcMonthlyPaymentInCents(
 console.log(MESSAGES['welcome']);
 
 // GET loan amount in dollars and cents ($123.45) from user
-let loanAmountInput = readline.question(MESSAGES['loanAmmount']);
-while (!isValidNumericInput(loanAmountInput)) {
-  console.log(MESSAGES['invalidInput']);
-  loanAmountInput = readline.question(MESSAGES['loanAmmount']);
-}
+let loanAmountInput = getAndValidateInputString(MESSAGES['loanAmmount'], isValidNumericInput);
 
 // CONVERT input to integer of cents
 let loanAmountInCents = Math.floor(Number(loanAmountInput) * 100);
 
 // GET Annual Percentage Rate (APR) in percent (3.50%) from user
-let annualPercentageRateInput = readline.question(MESSAGES['annualPercentageRate']);
-while (!isValidNumericInput(annualPercentageRateInput)) {
-  console.log(MESSAGES['invalidInput']);
-  annualPercentageRateInput = readline.question(MESSAGES['annualPercentageRate']);
-}
+let annualPercentageRateInput = getAndValidateInputString(MESSAGES['annualPercentageRate'], isValidNumericInput);
 
-// CONVERT input to ratio between 0 and 1
-let annualPercentageRate = parseFloat(annualPercentageRateInput) / 100;
-
-// CONVERT yearly rate to monthly rate
-let monthlyInterestRate = annualPercentageRate / 12;
+// CONVERT input to monthly interest rate
+let monthlyInterestRate = (parseFloat(annualPercentageRateInput / 100) / 12);
 
 // GET time unit the user wishes to provide the loan duration (years or months)
-let timeUnitInput = readline.question(MESSAGES['timeUnit']);
-
-// CONVERT input to one letter string
-let firstChar = timeUnitInput.trim().toLowerCase()[0];
-while (!isValidTimeUnitInput(firstChar)) {
-  console.log(MESSAGES['invalidInput']);
-  timeUnitInput = readline.question(MESSAGES['timeUnit']);
-  firstChar = timeUnitInput.trim().toLowerCase()[0];
-}
+let timeUnitInput = getAndValidateInputString(MESSAGES['timeUnit'], isValidTimeUnitInput);
 
 // GET loan duration from user
-let loanDurationInput = readline.question(MESSAGES['loanDuration']);
-while (!isValidNumericInput(loanDurationInput)) {
-  console.log(MESSAGES['invalidInput']);
-  loanDurationInput = readline.question(MESSAGES['loanDuration']);
-}
+let loanDurationInput = getAndValidateInputString(MESSAGES['loanDuration'], isValidNumericInput);
 
 // CONVERT duration to months if necessary
-let loanDurationInMonths;
-switch (firstChar) {
-  case 'y':
-    loanDurationInMonths = Number(loanDurationInput * 12);
-    break;
-  case 'm':
-    loanDurationInMonths = Number(loanDurationInput);
-    break;
-}
+let loanDurationInMonths = getLoanDurationInMonths(
+  timeUnitInput, loanDurationInput
+);
 
 // CALCULATE monthly payment
 let monthlyPaymentInCents = calcMonthlyPaymentInCents(
