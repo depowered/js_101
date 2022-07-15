@@ -5,5 +5,6 @@
     "timeUnit": "Do you wish to provide the loan duration in months or years? [m/y]",
     "loanDuration": "Enter the loan duration.",
     "invalidInput": "The input provided is not valid. Please try again.",
+    "monthlyPayment": "Estimated Monthly Loan Payment: $",
     "repeat": "Would you like to preform another calculation? [y/n]"
 }

@@ -48,6 +48,8 @@ function calcMonthlyPaymentInCents(
 }
 
 
+// ------ Start Main Program ------
+
 let continueCalculation = true;
 
 while (continueCalculation) {
@@ -89,7 +91,7 @@ while (continueCalculation) {
     loanAmountInCents, monthlyInterestRate, loanDurationInMonths
   );
   console.log(
-    `Monthly Loan Payment: $${(monthlyPaymentInCents / 100).toFixed(2)}`
+    MESSAGES['monthlyPayment'] + (monthlyPaymentInCents / 100).toFixed(2)
   );
 
   // GET repeat yes / no input from user
