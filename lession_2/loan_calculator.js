@@ -55,40 +55,34 @@ while (continueCalculation) {
   console.log(MESSAGES['welcome']);
 
   // GET loan amount in dollars and cents ($123.45) from user
-  let loanAmountInput = getAndValidateUserInput(MESSAGES['loanAmount'], isValidNumericInput);
-
   // CONVERT input to integer of cents
+  let loanAmountInput = getAndValidateUserInput(MESSAGES['loanAmount'], isValidNumericInput);
   let loanAmountInCents = Math.floor(Number(loanAmountInput) * 100);
 
   // GET Annual Percentage Rate (APR) in percent (3.50%) from user
-  let annualPercentageRateInput = getAndValidateUserInput(MESSAGES['annualPercentageRate'], isValidNumericInput);
-
   // CONVERT input to monthly interest rate
+  let annualPercentageRateInput = getAndValidateUserInput(MESSAGES['annualPercentageRate'], isValidNumericInput);
   let monthlyInterestRate = (parseFloat(annualPercentageRateInput / 100) / 12);
 
   // GET time unit for the loan duration (years or months)
-  let timeUnitInput = getAndValidateUserInput(MESSAGES['timeUnit'], isValidTimeUnitInput);
-
   // GET loan duration from user
+  // CONVERT duration to numeric months
+  let timeUnitInput = getAndValidateUserInput(MESSAGES['timeUnit'], isValidTimeUnitInput);
   let loanDurationInput = getAndValidateUserInput(MESSAGES['loanDuration'], isValidNumericInput);
-
-  // CONVERT duration to months if necessary
   let loanDurationInMonths = calcLoanDurationInMonths(
     timeUnitInput, loanDurationInput
   );
 
   // CALCULATE monthly payment
+  // PRINT formatted result to user
   let monthlyPaymentInCents = calcMonthlyPaymentInCents(
     loanAmountInCents, monthlyInterestRate, loanDurationInMonths
   );
-
-  // PRINT monthlyPaymentInCents to terminal formatted as currency ($123.45)
   console.log(`Your monthly loan payment will be $${(monthlyPaymentInCents / 100).toFixed(2)}`);
 
   // GET repeat yes / no input from user
-  let repeatInput = getAndValidateUserInput(MESSAGES['repeat'], isValidRepeatInput);
-
   // BREAK loop if first char of repeatInput is not 'y'
+  let repeatInput = getAndValidateUserInput(MESSAGES['repeat'], isValidRepeatInput);
   continueCalculation = (repeatInput.toLowerCase()[0] === 'y');
 }
 // ------ END Main Program ------
