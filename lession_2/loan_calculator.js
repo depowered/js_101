@@ -50,9 +50,7 @@ function calcMonthlyPaymentInCents(
 
 // ------ Start Main Program ------
 
-let continueCalculation = true;
-
-while (continueCalculation) {
+while (true) {
   console.log(MESSAGES['welcome']);
 
   // GET loan amount in dollars and cents ($123.45) from user
@@ -99,5 +97,5 @@ while (continueCalculation) {
   const repeatInput = getAndValidateUserInput(
     MESSAGES['repeat'], isValidRepeatInput
   );
-  continueCalculation = (repeatInput.toLowerCase()[0] === 'y');
+  if (repeatInput.toLowerCase()[0] === 'n') break;
 }
