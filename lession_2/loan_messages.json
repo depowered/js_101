@@ -1,8 +1,9 @@
 {
     "welcome": "Welcome to our loan calculator!",
-    "loanAmmount": "Enter the loan amount.\n=> $",
-    "annualPercentageRate": "Enter the annual percentage rate (APR) in percent (%).\n=> ",
-    "timeUnit": "Do you wish to provide the loan duration in months or years? [m/y]\n=> ",
-    "loanDuration": "Enter the loan duration:\n=> ",
-    "invalidInput": "The input provided is not valid. Please try again."
+    "loanAmount": "Enter the loan amount ($).",
+    "annualPercentageRate": "Enter the annual percentage rate (APR) in percent (%).",
+    "timeUnit": "Do you wish to provide the loan duration in months or years? [m/y]",
+    "loanDuration": "Enter the loan duration.",
+    "invalidInput": "The input provided is not valid. Please try again.",
+    "repeat": "Would you like to preform another calculation? [y/n]"
 }
