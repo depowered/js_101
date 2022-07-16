@@ -21,12 +21,13 @@ function isValidRepeatInput(inputString) {
 
 
 function getAndValidateUserInput(prompt, validationFunction) {
-  let input = readline.question(`${prompt}\n=> `).trim();
-  while (!validationFunction(input)) {
+  while (true) {
+    let input = readline.question(`${prompt}\n=> `).trim();
+    if (validationFunction(input)) {
+      return input;
+    }
     console.log(MESSAGES['invalidInput']);
-    input = readline.question(`${prompt}\n=> `);
   }
-  return input;
 }
 
 function calcLoanDurationInMonths(timeUnitInput, loanDurationInput) {
