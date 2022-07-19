@@ -40,17 +40,22 @@ const RULES = {
     return (this.getValidInputsList().includes(inputString));
   },
 
-  getOptionFromValidInput(inputString) {
+  getOptionFromString(inputString) {
     for (const option in RULES.options) {
       if (RULES['options'][option]['validInputs'].includes(inputString)) {
         return option;
       }
     }
     return null;
+  },
+
+  getRandomOption() {
+    let randomIndex = Math.floor(Math.random() * this.getAllOptions().length);
+    return this.getAllOptions()[randomIndex];
   }
 };
 
-function displayChoiceOptions() {
+function displayOptions() {
   displayMessage('Choose one:');
   for (let option of RULES.getAllOptions()) {
     let validInputs = RULES['options'][option]['validInputs'];
@@ -74,19 +79,24 @@ function displayWinner(playerChoice, computerChoice) {
   }
 }
 
-while (true) {
-  displayChoiceOptions();
-  let input = readline.question().trim().toLocaleLowerCase();
+function readAndValidateInput() {
+  while (true) {
+    let input = readline.question().trim().toLowerCase();
 
-  while (!RULES.isValidInput(input)) {
-    displayMessage("That's not a valid choice.");
-    input = readline.question().trim().toLocaleLowerCase();
+    if (RULES.isValidInput(input)) {
+      return input;
+    } else {
+      displayMessage("That's not a valid input");
+    }
   }
+}
 
-  let playerChoice = RULES.getOptionFromValidInput(input);
+while (true) {
+  displayOptions();
+  let input = readAndValidateInput();
+  let playerChoice = RULES.getOptionFromString(input);
 
-  let randomIndex = Math.floor(Math.random() * RULES.getAllOptions().length);
-  let computerChoice = RULES.getAllOptions()[randomIndex];
+  let computerChoice = RULES.getRandomOption();
 
   displayWinner(playerChoice, computerChoice);
 
