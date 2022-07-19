@@ -77,18 +77,6 @@ function displayMessage(message) {
   console.log(`=> ${message}`);
 }
 
-function displayRoundWinner(playerChoice, computerChoice) {
-  displayMessage(`You chose ${playerChoice}. Computer chose ${computerChoice}.`);
-
-  if (playerChoice === computerChoice) {
-    displayMessage("It's a tie.");
-  } else if (RULES['options'][playerChoice]['beats'] === computerChoice) {
-    displayMessage('You won!');
-  } else {
-    displayMessage('Computer won!');
-  }
-}
-
 function displayScore(score) {
   displayMessage('');
   displayMessage('-----------------------------------------------');
