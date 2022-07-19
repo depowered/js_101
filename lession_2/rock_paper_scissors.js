@@ -39,6 +39,13 @@ const CHOICE_ABBREVIATIONS = {
 const VALID_CHOICES = Object.keys(RULES);
 const VALID_ABBREVIATIONS = Object.keys(CHOICE_ABBREVIATIONS);
 
+function displayChoiceOptions() {
+  prompt('Chose one:');
+  for (let [key, value] of Object.entries(RULES)) {
+    prompt(`  ${key} (${value.abbreviation})`);
+  }
+}
+
 function getChoiceFromInputString(inputString) {
   if (VALID_CHOICES.includes(inputString)) {
     return inputString;
@@ -71,7 +78,7 @@ function displayWinner(playerChoice, computerChoice) {
 }
 
 while (true) {
-  prompt(`Choose one: ${VALID_CHOICES.join(', ')}`);
+  displayChoiceOptions();
   let input = readline.question().trim().toLocaleLowerCase();
 
   while (!isValidChoice(input)) {
