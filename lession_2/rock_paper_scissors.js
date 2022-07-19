@@ -40,9 +40,9 @@ const VALID_CHOICES = Object.keys(RULES);
 const VALID_ABBREVIATIONS = Object.keys(CHOICE_ABBREVIATIONS);
 
 function displayChoiceOptions() {
-  prompt('Chose one:');
-  for (let [key, value] of Object.entries(RULES)) {
-    prompt(`  ${key} (${value.abbreviation})`);
+  prompt('Choose one:');
+  for (let option of Object.keys(RULES)) {
+    prompt(`  ${RULES[option]['fullName']} (${RULES[option]['abbreviation']})`);
   }
 }
 
