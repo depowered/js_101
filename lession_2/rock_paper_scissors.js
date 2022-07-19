@@ -1,11 +1,31 @@
 const readline = require('readline-sync');
 
-const KEY_BEATS_VALUE = {
-  rock: "lizard",
-  paper: "rock",
-  scissors: "paper",
-  lizard: "spock",
-  spock: "scissors"
+const RULES = {
+  rock: {
+    fullName: 'rock',
+    abbreviation: 'r',
+    beats: 'lizard'
+  },
+  paper: {
+    fullName: 'paper',
+    abbreviation: 'p',
+    beats: 'rock'
+  },
+  scissors: {
+    fullName: 'scissors',
+    abbreviation: 'sc',
+    beats: 'paper'
+  },
+  lizard: {
+    fullName: 'lizard',
+    abbreviation: 'l',
+    beats: 'spock'
+  },
+  spock: {
+    fullName: 'spock',
+    abbreviation: 'sp',
+    beats: 'scissors'
+  }
 };
 
 const CHOICE_ABBREVIATIONS = {
@@ -16,7 +36,7 @@ const CHOICE_ABBREVIATIONS = {
   sp: "spock"
 };
 
-const VALID_CHOICES = Object.keys(KEY_BEATS_VALUE);
+const VALID_CHOICES = Object.keys(RULES);
 const VALID_ABBREVIATIONS = Object.keys(CHOICE_ABBREVIATIONS);
 
 function getChoiceFromInputString(inputString) {
@@ -43,7 +63,7 @@ function displayWinner(playerChoice, computerChoice) {
 
   if (playerChoice === computerChoice) {
     prompt("It's a tie.");
-  } else if (KEY_BEATS_VALUE[playerChoice] === computerChoice) {
+  } else if (RULES[playerChoice]['beats'] === computerChoice) {
     prompt('You won!');
   } else {
     prompt('Computer won!');
