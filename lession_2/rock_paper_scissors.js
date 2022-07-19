@@ -52,6 +52,16 @@ const RULES = {
   getRandomOption() {
     let randomIndex = Math.floor(Math.random() * this.getAllOptions().length);
     return this.getAllOptions()[randomIndex];
+  },
+
+  getWinner(playerChoice, computerChoice) {
+    if (playerChoice === computerChoice) {
+      return 'tie';
+    } else if (this['options'][playerChoice]['beats'] === computerChoice) {
+      return 'player';
+    } else {
+      return 'computer';
+    }
   }
 };
 
@@ -67,7 +77,7 @@ function displayMessage(message) {
   console.log(`=> ${message}`);
 }
 
-function displayWinner(playerChoice, computerChoice) {
+function displayRoundWinner(playerChoice, computerChoice) {
   displayMessage(`You chose ${playerChoice}. Computer chose ${computerChoice}.`);
 
   if (playerChoice === computerChoice) {
@@ -77,6 +87,16 @@ function displayWinner(playerChoice, computerChoice) {
   } else {
     displayMessage('Computer won!');
   }
+}
+
+function displayScore(score) {
+  displayMessage('');
+  displayMessage('-----------------------------------------------');
+  displayMessage(
+    `Scores: Player ${score.player}, Computer ${score.computer}`
+  );
+  displayMessage('-----------------------------------------------');
+  displayMessage('');
 }
 
 function readAndValidateInput() {
@@ -92,15 +112,49 @@ function readAndValidateInput() {
 }
 
 while (true) {
-  displayOptions();
-  let input = readAndValidateInput();
-  let playerChoice = RULES.getOptionFromString(input);
+  let score = { player: 0, computer: 0 };
+  let gameOver = false;
 
-  let computerChoice = RULES.getRandomOption();
+  while (!gameOver) {
+    displayOptions();
+    let input = readAndValidateInput();
+    let playerChoice = RULES.getOptionFromString(input);
 
-  displayWinner(playerChoice, computerChoice);
+    let computerChoice = RULES.getRandomOption();
 
-  displayMessage('Do you want to play again (y/n)?');
+    displayMessage(
+      `You chose ${playerChoice}. Computer chose ${computerChoice}.`
+    );
+
+    let winner = RULES.getWinner(playerChoice, computerChoice);
+
+    switch (winner) {
+      case 'tie':
+        displayMessage("This round is a tie.");
+        break;
+      case 'player':
+        displayMessage('You won this round!');
+        score.player += 1;
+        break;
+      case 'computer':
+        displayMessage('Computer won this round!');
+        score.computer += 1;
+        break;
+    }
+
+    displayScore(score);
+
+    if (score.player === 3) {
+      displayMessage('You won the game!');
+      gameOver = true;
+    }
+    if (score.computer === 3) {
+      displayMessage('Computer won the game!');
+      gameOver = true;
+    }
+  }
+
+  displayMessage('Do you want to play again? [y/n]');
   let answer = readline.question().toLowerCase();
 
   while (answer[0] !== 'n' && answer[0] !== 'y') {
