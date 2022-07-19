@@ -1,5 +1,14 @@
 const readline = require('readline-sync');
-const VALID_CHOICES = ['rock', 'paper', 'scissors'];
+
+const KEY_BEATS_VALUE = {
+  rock: "lizard",
+  paper: "rock",
+  scisors: "paper",
+  lizard: "spock",
+  spock: "scisors"
+};
+
+const VALID_CHOICES = Object.keys(KEY_BEATS_VALUE);
 
 function prompt(message) {
   console.log(`=> ${message}`);
@@ -8,16 +17,12 @@ function prompt(message) {
 function displayWinner(choice, computerChoice) {
   prompt(`You chose ${choice}. Computer chose ${computerChoice}.`);
 
-  if ((choice === 'rock' && computerChoice === 'scissors') ||
-    (choice === 'paper' && computerChoice === 'rock') ||
-    (choice === 'scissors' && computerChoice === 'paper')) {
-    prompt('You win!');
-  } else if ((choice === 'rock' && computerChoice === 'paper') ||
-    (choice === 'paper' && computerChoice === 'scissors') ||
-    (choice === 'scissors' && computerChoice === 'rock')) {
-    prompt('Computer wins!');
+  if (choice === computerChoice) {
+    prompt("It's a tie.");
+  } else if (KEY_BEATS_VALUE[choice] === computerChoice) {
+    prompt('You won!');
   } else {
-    prompt("It's a tie");
+    prompt('Computer won!');
   }
 }
 
