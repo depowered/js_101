@@ -9,21 +9,19 @@ function isValidNumericInput(inputString) {
 }
 
 function isValidTimeUnitInput(inputString) {
-  const firstChar = inputString.toLowerCase()[0];
-  return (firstChar === 'y' || firstChar === 'm');
+  return (['m', 'y'].includes(inputString[0]));
 }
 
 function isValidRepeatInput(inputString) {
-  const firstChar = inputString.toLowerCase()[0];
-  return (firstChar === 'y' || firstChar === 'n');
+  return (['y', 'n'].includes(inputString[0]));
 }
 // ------ End Validation Functions ------
 
 
 function getAndValidateUserInput(prompt, validationFunction) {
   while (true) {
-    let input = readline.question(`${prompt}\n=> `).trim();
-    if (validationFunction(input)) {
+    let input = readline.question(`${prompt}\n=> `).trim().toLowerCase();
+    if (input && validationFunction(input)) {
       return input;
     }
     console.log(MESSAGES['invalidInput']);
@@ -31,8 +29,7 @@ function getAndValidateUserInput(prompt, validationFunction) {
 }
 
 function calcLoanDurationInMonths(timeUnitInput, loanDurationInput) {
-  const firstChar = timeUnitInput.toLowerCase()[0];
-  if (firstChar === 'y') {
+  if (timeUnitInput === 'y') {
     return Number(loanDurationInput * 12);
   }
   return Number(loanDurationInput);
