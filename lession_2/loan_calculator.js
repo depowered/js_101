@@ -46,21 +46,14 @@ function calcMonthlyPaymentInCents(
 }
 
 
-// ------ Start Main Program ------
-
 while (true) {
   console.log(MESSAGES['welcome']);
 
-  // GET loan amount in dollars and cents ($123.45) from user
-  // CONVERT input to integer of cents
   const loanAmountInput = getAndValidateUserInput(
-    MESSAGES['loanAmount'],
-    isValidNumericInput
+    MESSAGES['loanAmount'], isValidNumericInput
   );
   const loanAmountInCents = Math.floor(Number(loanAmountInput) * 100);
 
-  // GET Annual Percentage Rate (APR) in percent (3.50%) from user
-  // CONVERT input to monthly interest rate
   const annualPercentageRateInput = getAndValidateUserInput(
     MESSAGES['annualPercentageRate'], isValidNumericInput
   );
@@ -68,9 +61,6 @@ while (true) {
     parseFloat(annualPercentageRateInput / 100) / 12
   );
 
-  // GET time unit for the loan duration (years or months)
-  // GET loan duration from user
-  // CONVERT duration to numeric months
   const timeUnitInput = getAndValidateUserInput(
     MESSAGES['timeUnit'], isValidTimeUnitInput
   );
@@ -81,8 +71,6 @@ while (true) {
     timeUnitInput, loanDurationInput
   );
 
-  // CALCULATE monthly payment
-  // PRINT formatted result to user
   const monthlyPaymentInCents = calcMonthlyPaymentInCents(
     loanAmountInCents, monthlyInterestRate, loanDurationInMonths
   );
@@ -90,10 +78,8 @@ while (true) {
     MESSAGES['monthlyPayment'] + (monthlyPaymentInCents / 100).toFixed(2)
   );
 
-  // GET repeat yes / no input from user
-  // BREAK loop if first char of repeatInput is not 'y'
   const repeatInput = getAndValidateUserInput(
     MESSAGES['repeat'], isValidRepeatInput
   );
-  if (repeatInput.toLowerCase()[0] === 'n') break;
+  if (repeatInput[0] === 'n') break;
 }
