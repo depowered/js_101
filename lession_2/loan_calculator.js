@@ -3,17 +3,27 @@ const MESSAGES = require('./loan_messages.json');
 
 
 // ------ Validation Functions ------
-function isValidNumericInput(inputString) {
+function isValidLoanAmount(inputString) {
   const num = Number(inputString);
-  return !(Number.isNaN(num) || num <= 0);
+  return (!Number.isNaN(num) && num > 0);
 }
 
-function isValidTimeUnitInput(inputString) {
-  return (['m', 'y'].includes(inputString[0]));
+function isValidAPR(inputString) {
+  const num = Number(inputString);
+  return (!Number.isNaN(num) && num >= 0);
 }
 
-function isValidRepeatInput(inputString) {
-  return (['y', 'n'].includes(inputString[0]));
+function isValidDuration(inputString) {
+  const num = Number(inputString);
+  return (Number.isInteger(num) && num >= 0);
+}
+
+function isValidTimeUnit(inputString) {
+  return (['m', 'months', 'y', 'years'].includes(inputString));
+}
+
+function isValidRepeat(inputString) {
+  return (['y', 'yes', 'n', 'no'].includes(inputString[0]));
 }
 // ------ End Validation Functions ------
 
@@ -28,6 +38,10 @@ function getAndValidateUserInput(prompt, validationFunction) {
   }
 }
 
+function calcLoanAmountInCents(loanAmountInput) {
+  return Math.floor(Number(loanAmountInput) * 100);
+}
+
 function calcLoanDurationInMonths(timeUnitInput, loanDurationInput) {
   if (timeUnitInput === 'y') {
     return Number(loanDurationInput * 12);
@@ -35,9 +49,20 @@ function calcLoanDurationInMonths(timeUnitInput, loanDurationInput) {
   return Number(loanDurationInput);
 }
 
+function calcMonthlyInterestRate(annualPercentageRate) {
+  if (annualPercentageRate === '0') {
+    return 0;
+  }
+  return parseFloat(annualPercentageRate / 100) / 12;
+}
+
 function calcMonthlyPaymentInCents(
   loanAmountInCents, monthlyInterestRate, loanDurationInMonths
 ) {
+  if (monthlyInterestRate === 0) {
+    return (loanAmountInCents / loanDurationInMonths);
+  }
+
   const monthlyPaymentInCents = (loanAmountInCents *
     (monthlyInterestRate /
       (1 - Math.pow((1 + monthlyInterestRate), (-loanDurationInMonths)))));
@@ -45,27 +70,31 @@ function calcMonthlyPaymentInCents(
   return monthlyPaymentInCents;
 }
 
+function continueLoop(repeatInput) {
+  return ['y', 'yes'].includes(repeatInput);
+}
+
 
 while (true) {
   console.log(MESSAGES['welcome']);
 
   const loanAmountInput = getAndValidateUserInput(
-    MESSAGES['loanAmount'], isValidNumericInput
+    MESSAGES['loanAmount'], isValidLoanAmount
   );
-  const loanAmountInCents = Math.floor(Number(loanAmountInput) * 100);
+  const loanAmountInCents = calcLoanAmountInCents(loanAmountInput);
 
   const annualPercentageRateInput = getAndValidateUserInput(
-    MESSAGES['annualPercentageRate'], isValidNumericInput
+    MESSAGES['annualPercentageRate'], isValidAPR
   );
-  const monthlyInterestRate = (
-    parseFloat(annualPercentageRateInput / 100) / 12
+  const monthlyInterestRate = calcMonthlyInterestRate(
+    annualPercentageRateInput
   );
 
   const timeUnitInput = getAndValidateUserInput(
-    MESSAGES['timeUnit'], isValidTimeUnitInput
+    MESSAGES['timeUnit'], isValidTimeUnit
   );
   const loanDurationInput = getAndValidateUserInput(
-    MESSAGES['loanDuration'], isValidNumericInput
+    MESSAGES['loanDuration'], isValidDuration
   );
   const loanDurationInMonths = calcLoanDurationInMonths(
     timeUnitInput, loanDurationInput
@@ -79,7 +108,7 @@ while (true) {
   );
 
   const repeatInput = getAndValidateUserInput(
-    MESSAGES['repeat'], isValidRepeatInput
+    MESSAGES['repeat'], isValidRepeat
   );
-  if (repeatInput[0] === 'n') break;
+  if (!continueLoop(repeatInput)) break;
 }
